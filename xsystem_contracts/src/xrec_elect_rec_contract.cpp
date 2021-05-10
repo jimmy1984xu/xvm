@@ -64,6 +64,7 @@ void xtop_rec_elect_rec_contract::setup() {
         current_group_nodes.insert(std::move(election_info_bundle));
     }
 
+    STRING_CREATE(data::election::get_property_by_group_id(common::xcommittee_group_id));
     serialization::xmsgpack_t<xelection_result_store_t>::serialize_to_string_prop(
         *this, data::election::get_property_by_group_id(common::xcommittee_group_id), election_result_store);
 }

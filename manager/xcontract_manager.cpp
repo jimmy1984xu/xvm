@@ -331,6 +331,7 @@ void xtop_contract_manager::init(observer_ptr<xstore_face_t> const & store, xobj
 }
 
 void xtop_contract_manager::setup_chain(common::xaccount_address_t const & contract_cluster_address, xstore_face_t * store) {
+    xassert(false); // delete future
     assert(contract_cluster_address.has_value());
 
     // not 0 height return
@@ -404,7 +405,7 @@ void xtop_contract_manager::setup_chain(common::xaccount_address_t const & contr
     xvm::xvm_service s;
     xtransaction_trace_ptr trace = s.deal_transaction(tx, &ac);
     if (trace->m_errno == enum_xvm_error_code::enum_vm_exception) {
-        xwarn("xtop_contract_manager::setup_chain deal_transaction fail, error: %d, %s", trace->m_errno, trace->m_errmsg.c_str());
+        xerror("xtop_contract_manager::setup_chain deal_transaction fail, account %s error: %d, %s", contract_cluster_address.c_str(), trace->m_errno, trace->m_errmsg.c_str());
         return;
     }
 
@@ -415,18 +416,20 @@ void xtop_contract_manager::setup_chain(common::xaccount_address_t const & contr
     xassert(block);
 
     base::xvaccount_t _vaddr(block->get_account());
+    xdbg("jimmy xtop_contract_manager::setup_chain blockchain account %s begin to store", contract_cluster_address.c_str());
     // m_blockstore->delete_block(_vaddr, genesis_block.get());  // delete default genesis block
     auto ret = m_syncstore->get_vblockstore()->store_block(_vaddr, block.get());
     if (!ret) {
         xerror("xtop_contract_manager::setup_chain %s genesis block fail", contract_cluster_address.c_str());
         return;
     }
+    xdbg("jimmy xtop_contract_manager::setup_chain blockchain account %s begin to execute", contract_cluster_address.c_str());
     ret = m_syncstore->get_vblockstore()->execute_block(_vaddr, block.get());
     if (!ret) {
         xwarn("xtop_contract_manager::setup_chain execute genesis block fail");
         return;
     }
-    xdbg("[xtop_contract_manager::setup_chain] setup %s, %s", contract_cluster_address.c_str(), ret ? "SUCC" : "FAIL");
+    xdbg("[xtop_contract_manager::setup_chain] succ. block=%s", block->dump().c_str());
 }
 
 void xtop_contract_manager::register_contract_cluster_address(common::xaccount_address_t const & address, common::xaccount_address_t const & cluster_address) {

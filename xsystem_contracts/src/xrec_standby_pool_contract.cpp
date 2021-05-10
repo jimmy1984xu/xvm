@@ -57,6 +57,7 @@ void xtop_rec_standby_pool_contract::setup() {
 
         standby_result_store.result_of(network_id()).insert({node_id, seed_node_info});
     }
+    STRING_CREATE(XPROPERTY_CONTRACT_STANDBYS_KEY);
     serialization::xmsgpack_t<xstandby_result_store_t>::serialize_to_string_prop(*this, XPROPERTY_CONTRACT_STANDBYS_KEY, standby_result_store);
 }
 
@@ -85,10 +86,10 @@ void xtop_rec_standby_pool_contract::nodeJoinNetwork(std::string const & node_id
     node.serialize_from(stream);
 
     auto standby_result_store = serialization::xmsgpack_t<xstandby_result_store_t>::deserialize_from_string_prop(*this, XPROPERTY_CONTRACT_STANDBYS_KEY);
-    
+
     chain_upgrade::xtop_chain_fork_config_center fork_config_center;
     auto fork_config = fork_config_center.chain_fork_config();
-    
+
     bool update_standby{false};
     if (!chain_upgrade::xtop_chain_fork_config_center::is_forked(fork_config.rec_standby_update_program_version, TIME())) {
         // old
@@ -480,7 +481,7 @@ void xtop_rec_standby_pool_contract::on_timer(common::xlogic_time_t const curren
     }
     XCONTRACT_ENSURE(!registration_data.empty(), "read registration data failed");
 
-    
+
     auto standby_result_store = serialization::xmsgpack_t<xstandby_result_store_t>::deserialize_from_string_prop(*this, XPROPERTY_CONTRACT_STANDBYS_KEY);
 
 

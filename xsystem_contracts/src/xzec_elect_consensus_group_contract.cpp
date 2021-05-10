@@ -201,6 +201,7 @@ void xtop_zec_elect_consensus_group_contract::setup() {
 #endif
     auto property_names = data::election::get_property_name_by_addr(SELF_ADDRESS());
     for (auto const & property : property_names) {
+        STRING_CREATE(property);
         serialization::xmsgpack_t<xelection_result_store_t>::serialize_to_string_prop(*this, property, election_result_store);
     }
 
@@ -249,6 +250,13 @@ void xtop_zec_elect_consensus_group_contract::elect(common::xzone_id_t const zon
         static_cast<std::uint64_t>(std::stoull(STRING_GET2(data::XPROPERTY_LAST_READ_REC_STANDBY_POOL_CONTRACT_BLOCK_HEIGHT, sys_contract_zec_standby_pool_addr)));
 
     std::string result;
+
+    GET_STRING_PROPERTY(data::XPROPERTY_CONTRACT_STANDBYS_KEY, result, read_height, sys_contract_rec_standby_pool_addr);
+    if (result.empty()) {
+        xwarn("[zec contract][elect_non_genesis] get rec_standby_pool_addr property fail, block height %" PRIu64, read_height);
+        return;
+    }
+#if 0
     int32_t ret = 0;
     do {
         base::xauto_ptr<xblock_t> block_ptr = get_block_by_height(sys_contract_rec_standby_pool_addr, read_height);
@@ -264,7 +272,7 @@ void xtop_zec_elect_consensus_group_contract::elect(common::xzone_id_t const zon
             break;
         }
     } while (read_height);
-
+#endif
     xwarn("[zec contract][elect_non_genesis] elect zone %" PRIu16 " cluster %" PRIu16 " random nonce %" PRIu64 " logic time %" PRIu64 " read_height: %" PRIu64,
           static_cast<std::uint16_t>(zone_id.value()),
           static_cast<std::uint16_t>(cluster_id.value()),
@@ -275,7 +283,7 @@ void xtop_zec_elect_consensus_group_contract::elect(common::xzone_id_t const zon
     auto const & standby_result_store = codec::msgpack_decode<xstandby_result_store_t>({std::begin(result), std::end(result)});
 
     auto const standby_network_result = standby_result_store.result_of(network_id()).network_result();
-    
+
     if (standby_network_result.empty()) {
         xwarn("[zec contract][elect_non_genesis] no standby nodes");
         return;
