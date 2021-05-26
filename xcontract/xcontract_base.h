@@ -30,19 +30,6 @@ enum class enum_type_t {
 
 #define BLOCK_DEFUALT_KEY   "_default"
 
-#define READ_OBJ_FROM_BLOCK(block, obj) \
-    OBJ_FROM_STRING(READ_FROM_BLOCK(block), obj)
-
-#define OBJ_FROM_STRING(str, obj)                                                                       \
-    [&](const std::string& value) {                                                                     \
-        if(!value.empty()) {                                                                            \
-            base::xstream_t stream(base::xcontext_t::instance(), (uint8_t*) value.data(), value.size());\
-            obj.serialize_from(stream);                                                                        \
-            return true;                                                                                \
-        }                                                                                               \
-        return false;                                                                                   \
-    }(str)
-
 /**
  * @brief  the contract base class
  *
@@ -463,6 +450,8 @@ public:
 
     virtual bool MAP_PROPERTY_EXIST(const std::string& key) const final;
 
+    virtual void GET_STRING_PROPERTY(const std::string& key, std::string& value, uint64_t height, const std::string& addr) const final;
+
     /**
      * @brief  generate a transaction
      *
@@ -486,15 +475,6 @@ public:
      * @param clear whether clear the block map property
      */
     virtual void BLOCK_SET_VALUE(const std::string& data, const std::string& key = BLOCK_DEFUALT_KEY, bool clear = true);
-
-    /**
-     * @brief read the block map property
-     *
-     * @param block_ptr  the block pointer to read the block map property
-     * @param key  the block map property key
-     * @return std::string  the returned block map property
-     */
-    virtual std::string READ_FROM_BLOCK(const data::xblock_ptr_t& block_ptr, const std::string& key = BLOCK_DEFUALT_KEY);
 
     /**
      * @brief create  _haskpt_key map property

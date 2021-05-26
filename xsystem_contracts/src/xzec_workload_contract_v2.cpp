@@ -7,6 +7,7 @@
 #include "xdata/xblock_statistics_data.h"
 #include "xdata/xnative_contract_address.h"
 #include "xdata/xworkload_info.h"
+#include "xdata/xfull_tableblock.h"
 #include "xstake/xstake_algorithm.h"
 #include "xvm/manager/xcontract_manager.h"
 #include "xvm/xsystem_contracts/xworkload/xzec_workload_contract_v2.h"

@@ -88,7 +88,7 @@ void xcontract_helper::string_create(const string& key) {
     }
 }
 void xcontract_helper::string_set(const string& key, const string& value, bool native) {
-    if (m_account_context->string_set(key, value, native)) {
+    if (m_account_context->string_set(key, value)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "STRING_SET " + key + " error");
     }
@@ -130,35 +130,35 @@ void xcontract_helper::list_create(const string& key) {
 }
 
 void xcontract_helper::list_push_back(const string& key, const string& value, bool native) {
-    if (m_account_context->list_push_back(key, value, native)) {
+    if (m_account_context->list_push_back(key, value)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "LIST_PUSH_BACK  " + key + " error");
     }
 }
 
 void xcontract_helper::list_push_front(const string& key, const string& value, bool native) {
-    if (m_account_context->list_push_front(key, value, native)) {
+    if (m_account_context->list_push_front(key, value)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "LIST_PUSH_FRONT " + key + " error");
     }
 }
 
 void xcontract_helper::list_pop_back(const string& key, string& value, bool native) {
-    if (m_account_context->list_pop_back(key, value, native)) {
+    if (m_account_context->list_pop_back(key, value)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "LIST_POP_BACK " + key + " error");
     }
 }
 
 void xcontract_helper::list_pop_front(const string& key, string& value, bool native) {
-    if (m_account_context->list_pop_front(key, value, native)) {
+    if (m_account_context->list_pop_front(key, value)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, key + " LIST_POP_FRONT " + key + " error");
     }
 }
 
 void xcontract_helper::list_clear(const string& key, bool native) {
-    if (m_account_context->list_clear(key, native)) {
+    if (m_account_context->list_clear(key)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, key + " LIST_CLEAR " + key + " error");
     }
@@ -226,14 +226,14 @@ int32_t xcontract_helper::map_get2(const string& key, const string& field, strin
 }
 
 void xcontract_helper::map_set(const string& key, const string& field, const string & value, bool native) {
-    if (m_account_context->map_set(key, field, value, native)) {
+    if (m_account_context->map_set(key, field, value)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "MAP_SET " + key + " error");
     }
 }
 
 void xcontract_helper::map_remove(const string& key, const string& field, bool native) {
-    if (m_account_context->map_remove(key, field, native)) {
+    if (m_account_context->map_remove(key, field)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "MAP_REMOVE " + key + " error");
     }
@@ -281,7 +281,7 @@ bool xcontract_helper::map_key_exist(const std::string& key) {
 }
 
 void xcontract_helper::map_clear(const std::string& key, bool native) {
-    if (m_account_context->map_clear(key, native)) {
+    if (m_account_context->map_clear(key)) {
         std::error_code ec{ enum_xvm_error_code::enum_vm_exception };
         top::error::throw_error(ec, "MAP_CLEAR " + key + " error");
     }
@@ -293,6 +293,10 @@ void xcontract_helper::get_map_property(const std::string& key, std::map<std::st
 
 bool xcontract_helper::map_property_exist(const std::string& key) {
     return m_account_context->map_property_exist(key) == 0;
+}
+
+void xcontract_helper::get_string_property(const std::string& key, std::string& value, uint64_t height, const std::string& addr) {
+    m_account_context->get_string_property(key, value, height, addr);
 }
 
 void xcontract_helper::generate_tx(common::xaccount_address_t const & target_addr, const string& func_name, const string& func_param) {

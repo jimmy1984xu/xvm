@@ -63,6 +63,7 @@ public:
     void map_clear(const std::string& key, bool native = false);
     void get_map_property(const std::string& key, std::map<std::string, std::string>& value, uint64_t height, const std::string& addr="");
     bool map_property_exist(const std::string& key);
+    void get_string_property(const std::string& key, std::string& value, uint64_t height, const std::string& addr="");
 
     void generate_tx(common::xaccount_address_t const & target_addr, const std::string& func_name, const std::string& func_param);
     std::string get_random_seed() const;

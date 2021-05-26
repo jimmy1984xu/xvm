@@ -169,11 +169,7 @@ void xcontract_base::STRING_CREATE(const string& key) {
 }
 
 void xcontract_base::STRING_SET(const string& key, const string& value) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->string_set(key, value, true);
-    } else {
-        m_contract_helper->string_set(key, value);
-    }
+    m_contract_helper->string_set(key, value);
 }
 
 string xcontract_base::STRING_GET(const string& key) const {
@@ -193,35 +189,19 @@ void xcontract_base::LIST_CREATE(const string& key) {
 }
 
 void xcontract_base::LIST_PUSH_BACK(const string& key, const string& value) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->list_push_back(key, value, true);
-    } else {
-        m_contract_helper->list_push_back(key, value);
-    }
+    m_contract_helper->list_push_back(key, value);
 }
 
 void xcontract_base::LIST_PUSH_FRONT(const string& key, const string& value) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->list_push_front(key, value, true);
-    } else {
-        m_contract_helper->list_push_front(key, value);
-    }
+    m_contract_helper->list_push_front(key, value);
 }
 
 void xcontract_base::LIST_POP_BACK(const std::string& key, std::string& value) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->list_pop_back(key, value, true);
-    } else {
-        m_contract_helper->list_pop_back(key, value);
-    }
+    m_contract_helper->list_pop_back(key, value);
 }
 
 void xcontract_base::LIST_POP_FRONT(const std::string& key, std::string& value) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->list_pop_front(key, value, true);
-    } else {
-        m_contract_helper->list_pop_front(key, value);
-    }
+    m_contract_helper->list_pop_front(key, value);
 }
 
 int32_t xcontract_base::LIST_SIZE(const string& key) {
@@ -229,11 +209,7 @@ int32_t xcontract_base::LIST_SIZE(const string& key) {
 }
 
 void xcontract_base::LIST_CLEAR(const std::string& key) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->list_clear(key, true);
-    } else {
-        m_contract_helper->list_clear(key);
-    }
+    m_contract_helper->list_clear(key);
 }
 
 vector<string> xcontract_base::LIST_GET_ALL(const string& key, const string& addr) {
@@ -257,27 +233,15 @@ int32_t xcontract_base::MAP_GET2(const string& key, const string& field, string&
 }
 
 void xcontract_base::MAP_SET(const string& key, const string& field, const string& value) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->map_set(key, field, value, true);
-    } else {
-        m_contract_helper->map_set(key, field, value);
-    }
+    m_contract_helper->map_set(key, field, value);
 }
 
 void xcontract_base::MAP_REMOVE(const string& key, const string& field) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->map_remove(key, field, true);
-    } else {
-        m_contract_helper->map_remove(key, field);
-    }
+    m_contract_helper->map_remove(key, field);
 }
 
 void xcontract_base::MAP_CLEAR(const std::string& key) {
-    if (xnative_property_name_t::is_native_property(key)) {
-        m_contract_helper->map_clear(key, true);
-    } else {
-        m_contract_helper->map_clear(key);
-    }
+    m_contract_helper->map_clear(key);
 }
 
 void xcontract_base::MAP_COPY_GET(const std::string& key, std::map<std::string, std::string> & map, const std::string& addr) const {
@@ -300,6 +264,10 @@ bool xcontract_base::MAP_PROPERTY_EXIST(const std::string& key) const {
     return m_contract_helper->map_property_exist(key);
 }
 
+void xcontract_base::GET_STRING_PROPERTY(const std::string& key, std::string& value, uint64_t height, const std::string& addr) const {
+    m_contract_helper->get_string_property(key, value, height, addr);
+}
+
 void xcontract_base::GENERATE_TX(common::xaccount_address_t const & target_addr, const string& func_name, const string& func_param) {
     m_contract_helper->generate_tx(target_addr, func_name, func_param);
 }
@@ -316,12 +284,6 @@ void xcontract_base::BLOCK_SET_VALUE(const std::string& data, const std::string&
     }
 
     m_contract_helper->map_set(data::XPORPERTY_CONTRACT_BLOCK_CONTENT_KEY, key, data, true);
-}
-
-std::string xcontract_base::READ_FROM_BLOCK(const xblock_ptr_t& block_ptr, const std::string& key) {
-    std::string value{};
-    block_ptr->get_native_property().native_map_get(data::XPORPERTY_CONTRACT_BLOCK_CONTENT_KEY, key, value);
-    return value;
 }
 
 void xcontract_base::ENABLE_CONTINUEABLE_ITER() {

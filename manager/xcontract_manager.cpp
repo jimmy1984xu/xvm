@@ -364,7 +364,9 @@ void xtop_contract_manager::setup_chain(common::xaccount_address_t const & contr
     tx->set_digest();
     tx->set_len();
 
-    xaccount_context_t ac(contract_cluster_address.value(), m_store.get());
+    xobject_ptr_t<base::xvbstate_t> bstate = make_object_ptr<base::xvbstate_t>(contract_cluster_address.value(), (uint64_t)0, (uint64_t)0, std::string(), std::string(), (uint64_t)0, (uint32_t)0, (uint16_t)0);
+    xaccount_ptr_t unitstate = std::make_shared<xunit_bstate_t>(bstate.get());
+    xaccount_context_t ac(unitstate, m_store.get());
 
     xvm::xvm_service s;
     s.deal_transaction(tx, &ac);
@@ -406,7 +408,9 @@ void xtop_contract_manager::setup_chain(common::xaccount_address_t const & contr
     tx->set_digest();
     tx->set_len();
 
-    xaccount_context_t ac(contract_cluster_address.value(), store);
+    xobject_ptr_t<base::xvbstate_t> bstate = make_object_ptr<base::xvbstate_t>(contract_cluster_address.value(), (uint64_t)0, (uint64_t)0, std::string(), std::string(), (uint64_t)0, (uint32_t)0, (uint16_t)0);
+    xaccount_ptr_t unitstate = std::make_shared<xunit_bstate_t>(bstate.get());
+    xaccount_context_t ac(unitstate, m_store.get());
 
     xvm::xvm_service s;
     s.deal_transaction(tx, &ac);

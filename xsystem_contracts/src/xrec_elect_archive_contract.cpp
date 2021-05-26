@@ -104,6 +104,7 @@ void xtop_rec_elect_archive_contract::setup() {
 #endif
     auto property_names = data::election::get_property_name_by_addr(SELF_ADDRESS());
     for (auto const & property : property_names) {
+        STRING_CREATE(property);
         serialization::xmsgpack_t<xelection_result_store_t>::serialize_to_string_prop(*this, property, election_result_store);
     }
 }

@@ -269,10 +269,12 @@ void xrole_context_t::call_contract(const std::string & action_params, uint64_t 
                   account->account_send_trans_number(),
                   timestamp);
         } else {
-            xvm::xvm_service s;
-            xaccount_context_t ac(address.value(), m_store.get());
-            auto trace = s.deal_transaction(tx, &ac);
-            xinfo("[xrole_context_t] call_contract in no_consensus mode with return code : %d", (int)trace->m_errno);
+            // TODO(jimmy) now support
+            xassert(false);
+            // xvm::xvm_service s;
+            // xaccount_context_t ac(address.value(), m_store.get());
+            // auto trace = s.deal_transaction(tx, &ac);
+            // xinfo("[xrole_context_t] call_contract in no_consensus mode with return code : %d", (int)trace->m_errno);
         }
     }
 }
@@ -304,10 +306,12 @@ void xrole_context_t::call_contract(const std::string & action_params, uint64_t 
               account->account_send_trans_number(),
               timestamp);
     } else {
-        xvm::xvm_service s;
-        xaccount_context_t ac(address.value(), m_store.get());
-        auto trace = s.deal_transaction(tx, &ac);
-        xinfo("[xrole_context_t] call_contract in no_consensus mode with return code : %d", (int)trace->m_errno);
+        // TODO(jimmy) now support
+        xassert(false);
+        // xvm::xvm_service s;
+        // xaccount_context_t ac(address.value(), m_store.get());
+        // auto trace = s.deal_transaction(tx, &ac);
+        // xinfo("[xrole_context_t] call_contract in no_consensus mode with return code : %d", (int)trace->m_errno);
     }
 }
 

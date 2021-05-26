@@ -57,6 +57,7 @@ void xtop_rec_standby_pool_contract::setup() {
 
         standby_result_store.result_of(network_id()).insert({node_id, seed_node_info});
     }
+    STRING_CREATE(XPROPERTY_CONTRACT_STANDBYS_KEY);
     serialization::xmsgpack_t<xstandby_result_store_t>::serialize_to_string_prop(*this, XPROPERTY_CONTRACT_STANDBYS_KEY, standby_result_store);
 }
 

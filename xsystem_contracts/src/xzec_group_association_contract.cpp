@@ -60,6 +60,7 @@ xtop_group_association_contract::setup() {
                associated_advance_gid.to_string().c_str());
     }
 
+    STRING_CREATE(data::XPROPERTY_CONTRACT_GROUP_ASSOC_KEY);
     serialization::xmsgpack_t<xelection_association_result_store_t>::serialize_to_string_prop(*this, data::XPROPERTY_CONTRACT_GROUP_ASSOC_KEY, election_association_result_store);
 }
 
