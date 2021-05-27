@@ -52,6 +52,10 @@ void xzec_vote_contract::setup() {
         std::string contract_adv_votes_str = std::string((const char*)stream.data(), stream.size());
         MAP_SET(XPORPERTY_CONTRACT_TICKETS_KEY, table_address, contract_adv_votes_str);
     }*/
+
+    auto const& source_address = SOURCE_ADDRESS();
+    MAP_CREATE(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY);
+    MAP_SET(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, base::xstring_utl::tostring(0));
 }
 
 int xzec_vote_contract::is_mainnet_activated() {
@@ -133,10 +137,10 @@ void xzec_vote_contract::on_receive_shard_votes_v2(uint64_t report_time, std::ma
 
     if ( !is_mainnet_activated() ) return;
 
-    if (!MAP_PROPERTY_EXIST(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY)) {
-        MAP_CREATE(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY);
-        MAP_SET(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, base::xstring_utl::tostring(0));
-    }
+    // if (!MAP_PROPERTY_EXIST(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY)) {
+    //     MAP_CREATE(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY);
+    //     MAP_SET(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, base::xstring_utl::tostring(0));
+    // }
     bool replace = true;
     std::string value_str;
     MAP_GET2(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, value_str);

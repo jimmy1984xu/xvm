@@ -46,6 +46,9 @@ void xzec_reward_contract::setup() {
     STRING_CREATE(XPROPERTY_LAST_READ_REC_REG_CONTRACT_LOGIC_TIME);
     std::string last_read_rec_reg_contract_logic_time{"0"};
     STRING_SET(XPROPERTY_LAST_READ_REC_REG_CONTRACT_LOGIC_TIME, last_read_rec_reg_contract_logic_time);
+
+    MAP_CREATE(XPORPERTY_CONTRACT_WORKLOAD_KEY);
+    MAP_CREATE(XPORPERTY_CONTRACT_VALIDATOR_WORKLOAD_KEY);
 }
 
 void xzec_reward_contract::on_timer(const uint64_t onchain_timer_round) {
@@ -1195,9 +1198,9 @@ void xzec_reward_contract::add_cluster_workload(bool auditor, std::string const&
     } else {
         property = XPORPERTY_CONTRACT_VALIDATOR_WORKLOAD_KEY;
     }
-    if (!MAP_PROPERTY_EXIST(property)) {
-        MAP_CREATE(property);
-    }
+    // if (!MAP_PROPERTY_EXIST(property)) {
+    //     MAP_CREATE(property);
+    // }
     common::xcluster_address_t cluster_id2;
     {
 

@@ -42,6 +42,11 @@ void xrec_registration_contract::setup() {
     MAP_CREATE(XPORPERTY_CONTRACT_REFUND_KEY);
     STRING_CREATE(XPORPERTY_CONTRACT_GENESIS_STAGE_KEY);
     MAP_CREATE(XPROPERTY_CONTRACT_SLASH_INFO_KEY);
+
+    auto const & source_address = SOURCE_ADDRESS();
+    MAP_CREATE(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY);
+    MAP_SET(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, base::xstring_utl::tostring(0));
+
 #ifdef MAINNET_ACTIVATED
     xactivation_record record;
     record.activated = 1;
@@ -638,10 +643,10 @@ void xrec_registration_contract::update_batch_stake_v2(uint64_t report_time, std
         return;
     }
 
-    if (!MAP_PROPERTY_EXIST(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY)) {
-        MAP_CREATE(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY);
-        MAP_SET(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, base::xstring_utl::tostring(0));
-    }
+    // if (!MAP_PROPERTY_EXIST(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY)) {
+    //     MAP_CREATE(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY);
+    //     MAP_SET(XPORPERTY_CONTRACT_VOTE_REPORT_TIME_KEY, source_address, base::xstring_utl::tostring(0));
+    // }
     bool replace = true;
     std::string value_str;
     uint64_t last_report_time = 0;
