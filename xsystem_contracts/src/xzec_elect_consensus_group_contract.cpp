@@ -283,7 +283,7 @@ void xtop_zec_elect_consensus_group_contract::elect(common::xzone_id_t const zon
     auto const & standby_result_store = codec::msgpack_decode<xstandby_result_store_t>({std::begin(result), std::end(result)});
 
     auto const standby_network_result = standby_result_store.result_of(network_id()).network_result();
-    
+
     if (standby_network_result.empty()) {
         xwarn("[zec contract][elect_non_genesis] no standby nodes");
         return;
@@ -478,8 +478,9 @@ bool xtop_zec_elect_consensus_group_contract::elect_auditor_validator(common::xz
          all_auditor_group_id.begin()->to_string().c_str(),
          (all_auditor_group_id.end() - 1)->to_string().c_str());
     for (auto const & other_auditor_group_id : all_auditor_group_id) {
-        if (other_auditor_group_id == auditor_group_id)
+        if (other_auditor_group_id == auditor_group_id) {
             continue;
+        }
         auto const & other_auditor_group_election_result_store = all_cluster_election_result_store.at(other_auditor_group_id);
         if (other_auditor_group_election_result_store.empty())
             continue;
@@ -543,8 +544,9 @@ bool xtop_zec_elect_consensus_group_contract::elect_auditor_validator(common::xz
         }
 
         for (auto const & other_validator_group_id : all_validator_group_id) {
-            if (other_validator_group_id == validator_group_id)
+            if (other_validator_group_id == validator_group_id) {
                 continue;
+            }
             auto & related_auditor_group_id = association_result_store.result_of(cluster_id).result_of(other_validator_group_id);
             auto const & other_auditor_group_election_result_store = all_cluster_election_result_store.at(related_auditor_group_id);
             if (other_auditor_group_election_result_store.empty())
@@ -632,6 +634,25 @@ bool xtop_zec_elect_consensus_group_contract::elect_auditor(common::xzone_id_t c
     auto const min_auditor_group_size = XGET_ONCHAIN_GOVERNANCE_PARAMETER(min_auditor_group_size);
     auto const max_auditor_group_size = XGET_ONCHAIN_GOVERNANCE_PARAMETER(max_auditor_group_size);
 
+    xdbg("[zec contract] zone %" PRIu16 " cluster %" PRIu16 " group %" PRIu16 ": group size [%" PRIu16 ", %" PRIu16 "]",
+         static_cast<std::uint16_t>(zid.value()),
+         static_cast<std::uint16_t>(cid.value()),
+         static_cast<std::uint16_t>(gid.value()),
+         static_cast<std::uint16_t>(min_auditor_group_size),
+         static_cast<std::uint16_t>(max_auditor_group_size));
+
+    if (max_auditor_group_size < min_auditor_group_size) {
+        assert(false);
+        xwarn("[zec contract] zone %" PRIu16 " cluster %" PRIu16 " group %" PRIu16 ": group size [%" PRIu16 ", %" PRIu16 "]",
+              static_cast<std::uint16_t>(zid.value()),
+              static_cast<std::uint16_t>(cid.value()),
+              static_cast<std::uint16_t>(gid.value()),
+              static_cast<std::uint16_t>(min_auditor_group_size),
+              static_cast<std::uint16_t>(max_auditor_group_size));
+
+        return false;
+    }
+
     return elect_group(zid,
                        cid,
                        gid,
@@ -661,6 +682,17 @@ bool xtop_zec_elect_consensus_group_contract::elect_validator(common::xzone_id_t
          static_cast<std::uint16_t>(validator_gid.value()),
          static_cast<std::uint16_t>(min_validator_group_size),
          static_cast<std::uint16_t>(max_validator_group_size));
+
+    if (max_validator_group_size < min_validator_group_size) {
+        assert(false);
+        xwarn("[zec contract] zone %" PRIu16 " cluster %" PRIu16 " group %" PRIu16 ": group size [%" PRIu16 ", %" PRIu16 "]",
+              static_cast<std::uint16_t>(zid.value()),
+              static_cast<std::uint16_t>(cid.value()),
+              static_cast<std::uint16_t>(validator_gid.value()),
+              static_cast<std::uint16_t>(min_validator_group_size),
+              static_cast<std::uint16_t>(max_validator_group_size));
+        return false;
+    }
 
     return elect_group(zid,
                        cid,
